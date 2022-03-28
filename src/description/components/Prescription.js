@@ -4,8 +4,6 @@ import { addDoc, collection } from "firebase/firestore";
 import { auth, db } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 const Prescription = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [prescription, setPrescription] = useState("");
   const [phoneNUmber, setPhoneNumber] = useState("");
   const [time, setTime] = useState("");
@@ -17,8 +15,6 @@ const Prescription = () => {
     try {
       const prescribeDoc = await addDoc(collection(db, "users"), {
         userInfo: {
-          firstName: firstName,
-          lastName: lastName,
           displayName: auth.currentUser.displayName,
           phoneNUmber: phoneNUmber,
         },
@@ -30,7 +26,7 @@ const Prescription = () => {
       navigate("/pList");
       console.log("Document written with ID: ", prescribeDoc.id);
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.log("Error adding document: ", error);
     }
     // console.log(firstName, lastName, prescription, phoneNUmber);
   };
@@ -41,28 +37,6 @@ const Prescription = () => {
       <div className="auth-wrapper">
         <div className="auth-inner">
           <form onSubmit={savePrescription}>
-            <div className="form-group">
-              <label>First name</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="First name"
-                onChange={(event) => {
-                  setFirstName(event.target.value);
-                }}
-              />
-            </div>
-            <div className="form-group">
-              <label>Last name</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Last name"
-                onChange={(event) => {
-                  setLastName(event.target.value);
-                }}
-              />
-            </div>
             <div className="form-group">
               <label htmlFor="email">Enter Prescription Details:</label>
               <textarea

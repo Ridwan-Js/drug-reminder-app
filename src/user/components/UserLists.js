@@ -6,9 +6,11 @@ const UserLists = (props) => {
     <ul className="list-unstyled">
       {props.items.map((user) => (
         <UserItem
-          firstName={user.userInfo.firstName}
-          lastName={user.userInfo.lastName}
-          key={user.time}
+          firstName={user.firstName}
+          lastName={user.lastName}
+          key={user.phoneNUmber}
+          id={user.id}
+          phoneNumber={user.phoneNUmber}
         />
       ))}
     </ul>

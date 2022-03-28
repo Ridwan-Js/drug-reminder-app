@@ -1,23 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { getDocs, collection, deleteDoc, doc } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  deleteDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore";
 import { auth, db } from "../../firebaseConfig";
+import { getAuth } from "firebase/auth";
 
 const PrescriptionList = () => {
   const [postList, setPostList] = useState([]);
-  const prescriptionDbRef = collection(db, "users");
-
+  const prescriptionDbRef = query(
+    collection(db, "users"),
+    where("userId", "==", auth.currentUser.uid)
+  );
   useEffect(() => {
     const getPrescription = async () => {
       const data = await getDocs(prescriptionDbRef);
       setPostList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
     getPrescription();
-  }, []);
+  }, [postList]);
 
   const deletePrescription = async (id) => {
     const PrescriptionDoc = doc(db, "users", id);
     await deleteDoc(PrescriptionDoc);
-    window.location.reload();
   };
   return (
     <React.Fragment>

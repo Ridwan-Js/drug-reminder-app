@@ -1,24 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import Button from "../../shared/components/FormElements/Button";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../shared/context/loginContext";
 
 const Login = ({ setIsAuth }) => {
+  const authen = useContext(AuthContext);
+  // const [isLoginMode, setIsLoginMode] = useState(true);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLogin, setIsLogin] = useState(false);
+  // const [isLogin, setIsLogin] = useState(false);
   const login = async () => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
       console.log(user._tokenResponse);
       if (user._tokenResponse.idToken) {
         localStorage.setItem("isAuth", true);
-        setIsAuth(true);
-        setIsLogin(true);
+        authen.login();
         navigate("/prescribe");
-        console.log("Ridwan does it");
       }
     } catch (error) {
       console.log(error.message);
@@ -51,18 +52,6 @@ const Login = ({ setIsAuth }) => {
                 setPassword(event.target.value);
               }}
             />
-          </div>
-          <div className="form-group">
-            <div className="custom-control custom-checkbox">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="customCheck1"
-              />
-              <label className="custom-control-label" htmlFor="customCheck1">
-                Remember me
-              </label>
-            </div>
           </div>
           <Button onClick={login} className="btn btn-block button">
             Login
